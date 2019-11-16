@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const logger = require('morgan')
 
 // Main App
 const app = express()
@@ -8,6 +9,9 @@ const app = express()
 // Body Parser Middleware
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+
+// logger 
+app.use(logger('dev'))
 
 // CORS
 app.use(cors())
