@@ -9,16 +9,16 @@ module.exports = {
 		data.id = uuid4()
 
 		// Hashing password
-		await bcryptHelper.hashPassword(data.password)
+		await bcryptHelper.hashPassword(data.pin)
 			.then(result => {
-				data.password = result
+				data.pin = result
 			})
 			.catch(err => {
 				console.log(err)
 			})
 
 		// Saving to database
-		User.addUser(data)
+		User.signup(data)
 			.then(() => {
 				res.json({
 					success: true,

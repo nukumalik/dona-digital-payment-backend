@@ -5,7 +5,7 @@ const router = Router()
 const userControllers = require('../controllers/userControllers')
 
 router
-	.post('/login', userControllers.login)
+	// .post('/login', userControllers.login)
 	.post('/signup', userControllers.signup)
 
 module.exports = router

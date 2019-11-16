@@ -2,9 +2,9 @@ const db = require('../config/db')
 
 module.exports = {
 	// All Example
-	singup: (data) => {
+	signup: (data) => {
 		return new Promise((resolve, reject) => {
-			const sql = 'INSERT INTO user SET ?'
+			const sql = 'INSERT INTO users SET ?'
 			db.query(sql, data, (err, result) => {
 				if(!err) {
 					resolve(result)
