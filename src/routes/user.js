@@ -6,7 +6,7 @@ const validation = require('../helpers/validation')
 const userControllers = require('../controllers/userControllers')
 
 router
-	// .post('/login', userControllers.login)
+	.post('/login', validation.login, userControllers.login)
 	.post('/signup',validation.register, userControllers.signup)
 
 module.exports = router
