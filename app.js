@@ -2,6 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const logger = require('morgan')
+const path = require('path')
 
 // Main App
 const app = express()
@@ -12,6 +13,9 @@ app.use(bodyParser.json())
 
 // logger 
 app.use(logger('dev'))
+
+//make the public folder accessible
+app.use('/public', express.static(path.join(__dirname, 'public')))
 
 // CORS
 app.use(cors())
