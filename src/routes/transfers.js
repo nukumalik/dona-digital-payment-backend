@@ -5,10 +5,10 @@ const router = Router()
 const transferControllers = require('../controllers/transferControllers')
 
 router
-	.get('/', transferControllers.all)
-	.get('/:id', transferControllers.get)
-	.post('/', transferControllers.post)
-// .patch('/:id', transferControllers.patch)
-// .delete('/:id', transferControllers.delete)
+	.get('/', transferControllers.allTransfer)
+	.get('/:transaction_id', transferControllers.getTransfer)
+	.post('/', transferControllers.createTransfer)
+// .patch('/:transaction_id', transferControllers.updateTransfer)
+// .delete('/:transaction_id', transferControllers.deleteTransfer)
 
 module.exports = router

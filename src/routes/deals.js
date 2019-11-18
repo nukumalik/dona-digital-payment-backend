@@ -5,10 +5,10 @@ const router = Router()
 const dealControllers = require('../controllers/dealControllers')
 
 router
-	.get('/', dealControllers.all)
-	.get('/:id', dealControllers.get)
-	.post('/', dealControllers.post)
-	.patch('/:id', dealControllers.patch)
-	.delete('/:id', dealControllers.delete)
+	.get('/', dealControllers.allDeal)
+	.get('/:id', dealControllers.getDeal)
+	.post('/', dealControllers.createDeal)
+	.patch('/:id', dealControllers.updateDeal)
+	.delete('/:id', dealControllers.deleteDeal)
 
 module.exports = router

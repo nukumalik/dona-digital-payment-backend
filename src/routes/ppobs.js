@@ -5,10 +5,10 @@ const router = Router()
 const ppobControllers = require('../controllers/ppobControllers')
 
 router
-	.get('/', ppobControllers.all)
-	.get('/:id', ppobControllers.get)
-	.post('/', ppobControllers.post)
-	.patch('/:id', ppobControllers.patch)
-// .delete('/:id', ppobControllers.delete)
+	.get('/', ppobControllers.allPPOB)
+	.get('/:transaction_id', ppobControllers.getPPOB)
+	.post('/', ppobControllers.createPPOB)
+	.patch('/:transaction_id', ppobControllers.updatePPOB)
+// .delete('/:transaction_id', ppobControllers.deletePPOB)
 
 module.exports = router

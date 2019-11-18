@@ -5,10 +5,10 @@ const router = Router()
 const merchantControllers = require('../controllers/merchantControllers')
 
 router
-	.get('/', merchantControllers.all)
-	.get('/:id', merchantControllers.get)
-	.post('/', merchantControllers.post)
-	.patch('/:id', merchantControllers.patch)
-	.delete('/:id', merchantControllers.delete)
+	.get('/', merchantControllers.allMerchant)
+	.get('/:id', merchantControllers.getMerchant)
+	.post('/', merchantControllers.createMerchant)
+	.patch('/:id', merchantControllers.updateMerchant)
+	.delete('/:id', merchantControllers.deleteMerchant)
 
 module.exports = router

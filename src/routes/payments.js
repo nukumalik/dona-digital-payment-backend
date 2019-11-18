@@ -5,10 +5,10 @@ const router = Router()
 const paymentControllers = require('../controllers/paymentControllers')
 
 router
-	.get('/', paymentControllers.all)
-	.get('/:id', paymentControllers.get)
-	.post('/', paymentControllers.post)
-// .patch('/:id', paymentControllers.patch)
-// .delete('/:id', paymentControllers.delete)
+	.get('/', paymentControllers.allPayment)
+	.get('/:transaction_id', paymentControllers.getPayment)
+	.post('/', paymentControllers.createPayment)
+// .patch('/:transaction_id', paymentControllers.updatePayment)
+// .delete('/:transaction_id', paymentControllers.deletePayment)
 
 module.exports = router
