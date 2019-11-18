@@ -19,7 +19,7 @@ module.exports = {
 	// Get PPOB
 	get: id => {
 		return new Promise((resolve, reject) => {
-			const sql = `SELECT * FROM ppobs where id='${id}'`
+			const sql = `SELECT * FROM ppobs where transaction_id='${id}'`
 
 			db.query(sql, (error, result) => {
 				if (!error) {
@@ -49,7 +49,7 @@ module.exports = {
 	// Update PPOB
 	update: (id, data) => {
 		return new Promise((resolve, reject) => {
-			const sql = 'UPDATE ppobs SET ? WHERE id = ?'
+			const sql = 'UPDATE ppobs SET ? WHERE transaction_id = ?'
 
 			db.query(sql, [id, data], (error, result) => {
 				if (!error) {
@@ -64,7 +64,7 @@ module.exports = {
 	// Delete PPOB
 	// delete: id => {
 	// 	return new Promise((resolve, reject) => {
-	// 		const sql = `DELETE FROM ppobs WHERE id='${id}'`
+	// 		const sql = `DELETE FROM ppobs WHERE transaction_id='${id}'`
 
 	// 		db.query(sql, (error, result) => {
 	// 			if (!error) {

@@ -1,10 +1,10 @@
 const db = require('../config/db')
 
 module.exports = {
-	// All Transfer
+	// All Deal
 	all: () => {
 		return new Promise((resolve, reject) => {
-			const sql = 'SELECT * FROM transfers'
+			const sql = 'SELECT * FROM topups'
 
 			db.query(sql, (error, result) => {
 				if (!error) {
@@ -16,10 +16,10 @@ module.exports = {
 		})
 	},
 
-	// Get Transfer
+	// Get Deal
 	get: id => {
 		return new Promise((resolve, reject) => {
-			const sql = `SELECT * FROM transfers where transaction_id='${id}'`
+			const sql = `SELECT * FROM topups where transaction_id='${id}'`
 
 			db.query(sql, (error, result) => {
 				if (!error) {
@@ -31,10 +31,10 @@ module.exports = {
 		})
 	},
 
-	// Create Transfer
+	// Create Deal
 	create: data => {
 		return new Promise((resolve, reject) => {
-			const sql = 'INSERT INTO transfers SET ?'
+			const sql = 'INSERT INTO topups SET ?'
 
 			db.query(sql, data, (error, result) => {
 				if (!error) {
@@ -46,10 +46,10 @@ module.exports = {
 		})
 	},
 
-	// Update Example
+	// Update Deal
 	update: (id, data) => {
 		return new Promise((resolve, reject) => {
-			const sql = 'UPDATE transfers SET ? WHERE transaction_id = ?'
+			const sql = 'UPDATE topups SET ? WHERE transaction_id = ?'
 
 			db.query(sql, [id, data], (error, result) => {
 				if (!error) {
@@ -61,10 +61,10 @@ module.exports = {
 		})
 	},
 
-	// Delete Example
+	// Delete Deal
 	// delete: id => {
 	// 	return new Promise((resolve, reject) => {
-	// 		const sql = `DELETE FROM transfers WHERE transaction_id='${id}'`
+	// 		const sql = `DELETE FROM topups WHERE transaction_id='${id}'`
 
 	// 		db.query(sql, (error, result) => {
 	// 			if (!error) {
