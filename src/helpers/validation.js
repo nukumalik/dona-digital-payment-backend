@@ -8,9 +8,6 @@ module.exports = {
 		check('pin')
 			.not()
 			.isEmpty(),
-		check('name')
-			.not()
-			.isEmpty(),
 	],
 	login: [
 		check('phone')
