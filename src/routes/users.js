@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const router = Router()
 const validation = require('../helpers/validation')
-const upload = require('../helpers/multer')
+const upload = require('../helpers/multer').userMulter
 
 // Controllers
 const userControllers = require('../controllers/userControllers')
