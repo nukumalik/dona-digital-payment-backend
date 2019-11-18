@@ -13,8 +13,6 @@ module.exports = {
 		data.id = uuid4()
 
 		const errors = validationResult(req)
-		console.log(errors)
-		console.log(data)
 		if (!errors.isEmpty()) {
 			return res.status(422).json({
 				status: 422,
@@ -24,8 +22,10 @@ module.exports = {
 		}
 
 		// Saving file path to database
-		req.file.filename = data.name + req.file.filename
-		data.photo = req.file.path
+		if (req.file) {
+			req.file.filename = data.name + req.file.filename
+			data.photo = req.file.path
+		}
 
 		// Hashing password
 		await bcryptHelper
