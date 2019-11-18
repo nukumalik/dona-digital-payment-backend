@@ -54,14 +54,14 @@ module.exports = {
 	// Get payment By ID
 	getPayment: (req, res) => {
 		// payment ID
-		const { id } = req.params
+		const { transaction_id } = req.params
 
-		Payment.get(id)
+		Payment.get(transaction_id)
 			.then(result => {
 				res.status(200).json({
 					status: 200,
 					error: false,
-					message: 'Success to get payment with ID: ' + id,
+					message: 'Success to get payment with transaction ID: ' + transaction_id,
 					data: result,
 				})
 			})

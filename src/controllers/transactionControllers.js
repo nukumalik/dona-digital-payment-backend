@@ -1,17 +1,73 @@
 // Model
 const Transaction = require('../models/Transaction')
+const Transfer = require('../models/Transfer')
+const Payment = require('../models/Payment')
+const PPOB = require('../models/PPOB')
+const Topup = require('../models/Topup')
 
 module.exports = {
 	// All Transaction
 	allTransaction: (req, res) => {
-		Transaction.all()
+		// User ID
+		const { user_id } = req.prams
+
+		Transaction.all(user_id)
 			.then(result => {
-				res.status(200).json({
-					status: 200,
-					error: false,
-					message: 'Success to get all transaction',
-					data: result,
-				})
+				// Type Transfer
+				if (result.type === 'transfer') {
+					for (let i = 0; i <= result.length; i++) {
+						Transfer.get(result.id[i]).then(data => {
+							res.status(200).json({
+								status: 200,
+								error: false,
+								message: 'Success to get all transaction with transfer type',
+								data,
+							})
+						})
+					}
+				}
+
+				// Type Payment
+				if (result.type === 'payment') {
+					for (let i = 0; i <= result.length; i++) {
+						Payment.get(result.id[i]).then(data => {
+							res.status(200).json({
+								status: 200,
+								error: false,
+								message: 'Success to get all transaction with payment type',
+								data,
+							})
+						})
+					}
+				}
+
+				// Type PPOB
+				if (result.type === 'ppob') {
+					for (let i = 0; i <= result.length; i++) {
+						PPOB.get(result.id[i]).then(data => {
+							res.status(200).json({
+								status: 200,
+								error: false,
+								message: 'Success to get all transaction with PPOB type',
+								data,
+							})
+						})
+					}
+				}
+
+				// Type Topup
+				if (result.type === 'topup') {
+					for (let i = 0; i <= result.length; i++) {
+						Topup.get(result.id[i]).then(data => {
+							res.status(200).json({
+								status: 200,
+								error: false,
+								message: 'Success to get all transaction with topup type',
+								data,
+							})
+						})
+					}
+				}
 			})
 			.catch(error => {
 				res.status(500).json({
@@ -66,12 +122,53 @@ module.exports = {
 
 		Transaction.get(id)
 			.then(result => {
-				res.status(200).json({
-					status: 200,
-					error: false,
-					message: 'Success to get transaction with ID: ' + id,
-					data: result,
-				})
+				// Type Transfer
+				if (result.type === 'transfer') {
+					Transfer.get(id).then(data => {
+						res.status(200).json({
+							status: 200,
+							error: false,
+							message: 'Success to get transfer transaction with transaction ID: ' + id,
+							data,
+						})
+					})
+				}
+
+				// Type Payment
+				if (result.type === 'payment') {
+					Payment.get(id).then(data => {
+						res.status(200).json({
+							status: 200,
+							error: false,
+							message: 'Success to get payment transaction with transaction ID: ' + id,
+							data,
+						})
+					})
+				}
+
+				// Type PPOB
+				if (result.type === 'ppob') {
+					PPOB.get(id).then(data => {
+						res.status(200).json({
+							status: 200,
+							error: false,
+							message: 'Success to get PPOB transaction with transaction ID: ' + id,
+							data,
+						})
+					})
+				}
+
+				// Type Topup
+				if (result.type === 'topup') {
+					Topup.get(id).then(data => {
+						res.status(200).json({
+							status: 200,
+							error: false,
+							message: 'Success to get topup transaction with transaction ID: ' + id,
+							data,
+						})
+					})
+				}
 			})
 			.catch(error => {
 				res.status(404).json({

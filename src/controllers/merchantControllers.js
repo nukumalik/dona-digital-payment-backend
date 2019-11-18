@@ -26,7 +26,8 @@ module.exports = {
 	// Create Merchant By ID
 	createMerchant: (req, res) => {
 		// Body Fields
-		const { name, logo } = req.body
+		const { name } = req.body
+		const logo = req.file.filename
 
 		// Data
 		const data = { name, logo }
@@ -80,7 +81,10 @@ module.exports = {
 		const { id } = req.params
 
 		// Body Fields
-		const { name, logo } = req.body
+		const { name } = req.body
+
+		// Logo
+		const logo = req.file.filename
 
 		// Data
 		const data = { name, logo }

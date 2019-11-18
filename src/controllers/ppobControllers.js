@@ -54,14 +54,14 @@ module.exports = {
 	// Get Example By ID
 	getPPOB: (req, res) => {
 		// Example ID
-		const { id } = req.params
+		const { transaction_id } = req.params
 
-		PPOB.get(id)
+		PPOB.get(transaction_id)
 			.then(result => {
 				res.status(200).json({
 					status: 200,
 					error: false,
-					message: 'Success to get PPOB with ID: ' + id,
+					message: 'Success to get PPOB with transaction ID: ' + transaction_id,
 					data: result,
 				})
 			})

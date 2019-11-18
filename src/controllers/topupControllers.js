@@ -1,15 +1,15 @@
 // Model
-const Transfer = require('../models/Transfer')
+const Topup = require('../models/Topup')
 
 module.exports = {
-	// All Transfer
-	allTransfer: (req, res) => {
-		Transfer.all()
+	// All Topup
+	allTopup: (req, res) => {
+		Topup.all()
 			.then(result => {
 				res.status(200).json({
 					status: 200,
 					error: false,
-					message: 'Success to get all transfer',
+					message: 'Success to get all topup',
 					data: result,
 				})
 			})
@@ -17,28 +17,27 @@ module.exports = {
 				res.status(500).json({
 					status: 500,
 					error: true,
-					message: 'Failed to get transfer',
+					message: 'Failed to get topup',
 					data: error,
 				})
 			})
 	},
 
-	// Create Transfer By ID
-	createTransfer: (req, res) => {
+	// Create Topup By ID
+	createTopup: (req, res) => {
 		// Body Fields
-		const { transaction_id, sender_id, receiver_id, amount } = req.body
-
-		const transfered_at = new Date()
+		const { transaction_id, merchant_id, amount, method } = req.body
+		const filled_at = new Date()
 
 		// Data
-		const data = { transaction_id, sender_id, receiver_id, amount, transfered_at }
+		const data = { transaction_id, merchant_id, amount, method, filled_at }
 
-		Transfer.create(data)
+		Topup.create(data)
 			.then(result => {
 				res.status(200).json({
 					status: 200,
 					error: false,
-					message: 'Success to create an transfer',
+					message: 'Success to create an topup',
 					data: result,
 				})
 			})
@@ -46,23 +45,23 @@ module.exports = {
 				res.status(404).json({
 					status: 404,
 					error: true,
-					message: 'Transfer does not exists',
+					message: 'Topup does not exists',
 					data: error,
 				})
 			})
 	},
 
-	// Get Transfer By ID
-	getTransfer: (req, res) => {
-		// Example ID
+	// Get Topup By ID
+	getTopup: (req, res) => {
+		// Topup ID
 		const { transaction_id } = req.params
 
-		Transfer.get(transaction_id)
+		Topup.get(transaction_id)
 			.then(result => {
 				res.status(200).json({
 					status: 200,
 					error: false,
-					message: 'Success to get transfer with transaction ID: ' + transaction_id,
+					message: 'Success to get topup with transaction ID: ' + transaction_id,
 					data: result,
 				})
 			})
@@ -70,33 +69,34 @@ module.exports = {
 				res.status(404).json({
 					status: 404,
 					error: true,
-					message: 'Transfer does not exists',
+					message: 'Topup does not exists',
 					data: error,
 				})
 			})
 	},
 
-	// Update Transfer By ID
-	// updateTransfer: (req, res) => {
-	// 	// Example ID
+	// Update Topup By ID
+	// updateTopup: (req, res) => {
+	// 	// topup ID
 	// 	const { id } = req.params
 
 	// 	// Body Fields
-	// 	const { transaction_id, sender_id, receiver_id, amount } = req.body
+	// 	const { transaction_id, merchant_id, amount, method } = req.body
 
 	// 	// Data
 	// 	const data = {}
 	// 	if (transaction_id) data.transaction_id = transaction_id
-	// 	if (sender_id) data.sender_id = sender_id
-	// 	if (receiver_id) data.receiver_id = receiver_id
+	// 	if (merchant_id) data.merchant_id = merchant_id
 	// 	if (amount) data.amount = amount
+	// 	if (method) data.method = method
+	// 	data.filled_at = new Date()
 
-	// 	Transfer.update(id, data)
+	// 	Topup.update(data)
 	// 		.then(() => {
 	// 			res.status(200).json({
 	// 				status: 200,
 	// 				error: false,
-	// 				message: 'Success to update transfer with ID: ' + id,
+	// 				message: 'Success to update topup with ID: ' + id,
 	// 				data,
 	// 			})
 	// 		})
@@ -104,23 +104,23 @@ module.exports = {
 	// 			res.status(400).json({
 	// 				status: 400,
 	// 				error: true,
-	// 				message: 'Failed to update transfer with ID: ' + id,
+	// 				message: 'Failed to update exmaple with ID: ' + id,
 	// 				data: error,
 	// 			})
 	// 		})
 	// },
 
-	// Delete Transfer By ID
-	// deleteTransfer: (req, res) => {
-	// 	// transfer ID
+	// Delete Topup By ID
+	// deleteTopup: (req, res) => {
+	// 	// topup ID
 	// 	const { id } = req.params
 
-	// 	Transfer.delete(id)
+	// 	Topup.delete(id)
 	// 		.then(() => {
 	// 			res.status(200).json({
 	// 				status: 200,
 	// 				error: false,
-	// 				message: 'Success to Delete transfer with ID: ' + id,
+	// 				message: 'Success to Delete topup with ID: ' + id,
 	// 				data: [],
 	// 			})
 	// 		})
@@ -128,7 +128,7 @@ module.exports = {
 	// 			res.status(404).json({
 	// 				status: 404,
 	// 				error: true,
-	// 				message: 'Transfer does not exists',
+	// 				message: 'Topup does not exists',
 	// 				data: error,
 	// 			})
 	// 		})
