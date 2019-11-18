@@ -4,6 +4,7 @@ const Transfer = require('../models/Transfer')
 const Payment = require('../models/Payment')
 const PPOB = require('../models/PPOB')
 const Topup = require('../models/Topup')
+const Merchant = require('../models/Merchant')
 
 module.exports = {
 	// All Transaction
