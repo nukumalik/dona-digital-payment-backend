@@ -53,6 +53,33 @@ module.exports = {
 			})
 	},
 
+	phoneCheck: (req, res) => {
+		const { phone } = req.body
+		User.getSingleUser(phone)
+			.then(result => {
+				if (result.length > 0) {
+					res.json({
+						status: 200,
+						error: false,
+						phone,
+						is_registered: true,
+						message: 'Phone is registered.',
+					})
+				} else {
+					res.json({
+						status: 401,
+						error: true,
+						phone,
+						is_registered: false,
+						message: 'phone number is not registered',
+					})
+				}
+			})
+			.catch(err => {
+				console.log(err)
+			})
+	},
+
 	login: (req, res) => {
 		const { phone, pin } = req.body
 		const errors = validationResult(req)
@@ -115,59 +142,48 @@ module.exports = {
 				console.log(err)
 			})
 	},
-	forgot: (req, res) => {
+	requestOtp: (req, res) => {
 		const phone = req.body.phone
 
-		User.getSingleUser(phone).then(result => {
-			if (result.length < 1) {
-				res.status(401)
-				res.json({
-					status: 401,
-					error: true,
-					message: 'phone number is not registered',
-				})
-			} else {
-				let otpCode = Math.floor(1000 + Math.random() * 9000)
-				User.getOtpCode(phone).then(result => {
-					let expDate = moment(new Date())
-						.add(10, 'm')
-						.toDate()
-					let data = {
-						phone,
-						otp_code: otpCode,
-						expired_date: expDate,
-					}
+		let otpCode = Math.floor(1000 + Math.random() * 9000)
+		User.getOtpCode(phone).then(result => {
+			let expDate = moment(new Date())
+				.add(10, 'm')
+				.toDate()
+			let data = {
+				phone,
+				otp_code: otpCode,
+				expired_date: expDate,
+			}
 
-					if (result.length < 1) {
-						User.addOtpCode(data)
-							.then(() => {
-								res.json({
-									status: 200,
-									error: false,
-									message: 'otp are ready to be verified',
-									data,
-								})
-							})
-							.catch(err => {
-								console.log(err)
-							})
-					} else {
-						let dataupdate = { ...data }
-						delete dataupdate.phone
-						User.updateOtpCode(dataupdate, phone)
-							.then(() => {
-								res.json({
-									status: 200,
-									error: false,
-									message: 'otp are ready to be verified',
-									data,
-								})
-							})
-							.catch(err => {
-								console.log(err)
-							})
-					}
-				})
+			if (result.length < 1) {
+				User.addOtpCode(data)
+					.then(() => {
+						res.json({
+							status: 200,
+							error: false,
+							message: 'otp are ready to be verified',
+							data,
+						})
+					})
+					.catch(err => {
+						console.log(err)
+					})
+			} else {
+				let dataupdate = { ...data }
+				delete dataupdate.phone
+				User.updateOtpCode(dataupdate, phone)
+					.then(() => {
+						res.json({
+							status: 200,
+							error: false,
+							message: 'otp are ready to be verified',
+							data,
+						})
+					})
+					.catch(err => {
+						console.log(err)
+					})
 			}
 		})
 	},
