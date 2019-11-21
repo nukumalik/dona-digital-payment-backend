@@ -1,25 +1,10 @@
 const db = require('../config/db')
 
 module.exports = {
-	// All Transfer
-	all: () => {
-		return new Promise((resolve, reject) => {
-			const sql = 'SELECT * FROM transfers'
-
-			db.query(sql, (error, result) => {
-				if (!error) {
-					resolve(result)
-				} else {
-					reject(error)
-				}
-			})
-		})
-	},
-
 	// Get Transfer
-	get: id => {
+	get: transaction_id => {
 		return new Promise((resolve, reject) => {
-			const sql = `SELECT * FROM transfers where transaction_id='${id}'`
+			const sql = `SELECT * FROM transfers where transaction_id='${transaction_id}'`
 
 			db.query(sql, (error, result) => {
 				if (!error) {
@@ -47,11 +32,11 @@ module.exports = {
 	},
 
 	// Update Example
-	update: (id, data) => {
+	update: (transaction_id, data) => {
 		return new Promise((resolve, reject) => {
-			const sql = 'UPDATE transfers SET ? WHERE transaction_id = ?'
+			const sql = `UPDATE transfers SET ? WHERE transaction_id='${transaction_id}'`
 
-			db.query(sql, [id, data], (error, result) => {
+			db.query(sql, data, (error, result) => {
 				if (!error) {
 					resolve(result)
 				} else {
@@ -60,19 +45,4 @@ module.exports = {
 			})
 		})
 	},
-
-	// Delete Example
-	// delete: id => {
-	// 	return new Promise((resolve, reject) => {
-	// 		const sql = `DELETE FROM transfers WHERE transaction_id='${id}'`
-
-	// 		db.query(sql, (error, result) => {
-	// 			if (!error) {
-	// 				resolve(result)
-	// 			} else {
-	// 				reject(error)
-	// 			}
-	// 		})
-	// 	})
-	// },
 }

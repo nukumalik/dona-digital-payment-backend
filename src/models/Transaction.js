@@ -49,9 +49,9 @@ module.exports = {
 	// Update Transaction
 	update: (id, data) => {
 		return new Promise((resolve, reject) => {
-			const sql = 'UPDATE transaction SET ? WHERE id = ?'
+			const sql = `UPDATE transaction SET ? WHERE id='${id}'`
 
-			db.query(sql, [id, data], (error, result) => {
+			db.query(sql, data, (error, result) => {
 				if (!error) {
 					resolve(result)
 				} else {

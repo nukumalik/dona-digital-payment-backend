@@ -4,7 +4,7 @@ const Transfer = require('../models/Transfer')
 const Payment = require('../models/Payment')
 const PPOB = require('../models/PPOB')
 const Topup = require('../models/Topup')
-const Merchant = require('../models/Merchant')
+const Balance = require('../models/Balance')
 
 module.exports = {
 	// All Transaction
@@ -98,19 +98,141 @@ module.exports = {
 		const data = { id, user_id, type }
 
 		Transaction.create(data)
-			.then(result => {
-				res.status(200).json({
-					status: 200,
-					error: false,
-					message: 'Success to create an transaction',
-					data: result,
-				})
+			.then(() => {
+				if (type === 'payment') {
+					const transaction_id = id
+					const { merchant_id, amount, description } = req.body
+					const paymentData = { transaction_id, merchant_id, amount, description }
+
+					// Update user balance
+					const userBalance = Balance.get(user_id).data[0].amount
+					if (amount > userBalance) {
+						return res.status(400).json({
+							status: 400,
+							error: true,
+							message: 'Your amount is not enough',
+							data: [],
+						})
+					} else {
+						Balance.update(user_id, { amount: userBalance - amount })
+					}
+
+					Payment.create(paymentData)
+						.then(data => {
+							res.status(200).json({
+								status: 200,
+								error: false,
+								message: 'Success to create an transaction',
+								data,
+							})
+						})
+						.catch(error => {
+							res.status(400).json({
+								status: 400,
+								error: true,
+								message: 'Failed to create transaction',
+								data: error,
+							})
+						})
+				}
+
+				if (type === 'ppob') {
+					const transaction_id = id
+					const { merchant_id, phone, type, nominal, amount, method } = req.body
+					const order_at = new Date()
+					const status = 'pending'
+					const ppobData = { transaction_id, merchant_id, phone, type, nominal, amount, status, method, order_at }
+					PPOB.create(ppobData)
+						.then(data => {
+							res.status(200).json({
+								status: 200,
+								error: false,
+								message: 'Success to create an transaction',
+								data,
+							})
+						})
+						.catch(error => {
+							res.status(400).json({
+								status: 400,
+								error: true,
+								message: 'Failed to create transaction',
+								data: error,
+							})
+						})
+				}
+
+				if (type === 'topup') {
+					const transaction_id = id
+					const { merchant_id, amount, method } = req.body
+					const topupData = { transaction_id, merchant_id, amount, method }
+
+					// Update user balance
+					const userBalance = Balance.get(user_id).data[0].amount
+					Balance.update(user_id, { amount: userBalance + amount })
+
+					Topup.create(topupData)
+						.then(data => {
+							Balance.updateAdd(user_id, amount)
+							res.status(200).json({
+								status: 200,
+								error: false,
+								message: 'Success to create an transaction',
+								data,
+							})
+						})
+						.catch(error => {
+							res.status(400).json({
+								status: 400,
+								error: true,
+								message: 'Failed to create transaction',
+								data: error,
+							})
+						})
+				}
+
+				if (type === 'transfer') {
+					const transaction_id = id
+					const sender_id = req.params.user_id
+					const { receiver_id, amount } = req.body
+					const transferData = { transaction_id, sender_id, receiver_id, amount }
+
+					// Update user balance
+					const userBalance = Balance.get(user_id).data[0].amount
+					if (amount > userBalance) {
+						return res.status(400).json({
+							status: 400,
+							error: true,
+							message: 'Your amount is not enough',
+							data: [],
+						})
+					} else {
+						Balance.update(user_id, { amount: userBalance - amount })
+					}
+
+					Transfer.create(transferData)
+						.then(data => {
+							res.status(200).json({
+								status: 200,
+								error: false,
+								message: 'Success to create an transaction',
+								data,
+							})
+						})
+						.catch(error => {
+							res.status(400).json({
+								status: 400,
+								error: true,
+								message: 'Failed to create transaction',
+								data: error,
+							})
+						})
+				}
 			})
 			.catch(error => {
-				res.status(404).json({
-					status: 404,
+				res.status(400).json({
+					status: 400,
 					error: true,
-					message: 'Transaction does not exists',
+					message: 'Failed to create transaction',
 					data: error,
 				})
 			})
@@ -182,61 +304,61 @@ module.exports = {
 	},
 
 	// Update Transaction By ID
-	// updateTransaction: (req, res) => {
-	// 	// Transaction ID
-	// 	const { id } = req.params
+	updateTransaction: (req, res) => {
+		// Transaction ID
+		const { id } = req.params
 
-	// 	// Body Fields
-	// 	const { transaction_id, merchant_id, amount, description } = req.body
+		// Body Fields
+		const { transaction_id, merchant_id, amount, description } = req.body
 
-	// 	// Data
-	// 	const data = {}
-	// 	if (transaction_id) data.transaction_id = transaction_id
-	// 	if (merchant_id) data.merchant_id = merchant_id
-	// 	if (amount) data.amount = amount
-	// 	if (description) data.description = description
-	// 	data.paid_at = new Date()
+		// Data
+		const data = {}
+		if (transaction_id) data.transaction_id = transaction_id
+		if (merchant_id) data.merchant_id = merchant_id
+		if (amount) data.amount = amount
+		if (description) data.description = description
+		data.paid_at = new Date()
 
-	// 	Transaction.update(data)
-	// 		.then(() => {
-	// 			res.status(200).json({
-	// 				status: 200,
-	// 				error: false,
-	// 				message: 'Success to update transaction with ID: ' + id,
-	// 				data,
-	// 			})
-	// 		})
-	// 		.catch(error => {
-	// 			res.status(400).json({
-	// 				status: 400,
-	// 				error: true,
-	// 				message: 'Failed to update exmaple with ID: ' + id,
-	// 				data: error,
-	// 			})
-	// 		})
-	// },
+		Transaction.update(data)
+			.then(() => {
+				res.status(200).json({
+					status: 200,
+					error: false,
+					message: 'Success to update transaction with ID: ' + id,
+					data,
+				})
+			})
+			.catch(error => {
+				res.status(400).json({
+					status: 400,
+					error: true,
+					message: 'Failed to update exmaple with ID: ' + id,
+					data: error,
+				})
+			})
+	},
 
 	// Delete Transaction By ID
-	// deleteTransaction: (req, res) => {
-	// 	// Transaction ID
-	// 	const { id } = req.params
+	deleteTransaction: (req, res) => {
+		// Transaction ID
+		const { id } = req.params
 
-	// 	Transaction.delete(id)
-	// 		.then(() => {
-	// 			res.status(200).json({
-	// 				status: 200,
-	// 				error: false,
-	// 				message: 'Success to Delete transaction with ID: ' + id,
-	// 				data: [],
-	// 			})
-	// 		})
-	// 		.catch(error => {
-	// 			res.status(404).json({
-	// 				status: 404,
-	// 				error: true,
-	// 				message: 'Transaction does not exists',
-	// 				data: error,
-	// 			})
-	// 		})
-	// },
+		Transaction.delete(id)
+			.then(() => {
+				res.status(200).json({
+					status: 200,
+					error: false,
+					message: 'Success to Delete transaction with ID: ' + id,
+					data: [],
+				})
+			})
+			.catch(error => {
+				res.status(404).json({
+					status: 404,
+					error: true,
+					message: 'Transaction does not exists',
+					data: error,
+				})
+			})
+	},
 }
