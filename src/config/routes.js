@@ -8,9 +8,9 @@ router
 	.use('/users', require('../routes/users'))
 	.use('/deals', require('../routes/deals'))
 	.use('/merchants', require('../routes/merchants'))
-	.use('/payments', require('../routes/payments'))
-	.use('/ppobs', require('../routes/ppobs'))
+	// .use('/payments', require('../routes/payments'))
+	// .use('/ppobs', require('../routes/ppobs'))
 	.use('/transactions', require('../routes/transactions'))
-	.use('/transfers', require('../routes/transfers'))
+// .use('/transfers', require('../routes/transfers'))
 
 module.exports = router

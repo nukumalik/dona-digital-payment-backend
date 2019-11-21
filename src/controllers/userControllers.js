@@ -89,7 +89,7 @@ module.exports = {
 								photo: result[0].photo,
 							}
 							if (compareResult) {
-								const token = jwt.sign({ ...result[0] }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' })
+								const token = jwt.sign({ ...result[0] }, 'very secret key', { expiresIn: '1h' })
 								res.json({
 									status: 200,
 									error: false,

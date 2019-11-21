@@ -22,8 +22,8 @@ app.use('/public', express.static(path.join(__dirname, 'public')))
 app.use(cors())
 
 //Passport
-app.use(passport.initialize())
-require('./src/helpers/passport')(passport)
+// app.use(passport.initialize())
+// require('./src/helpers/passport')(passport)
 
 // Routes
 app.use('/api/v1', require('./src/config/routes'))
