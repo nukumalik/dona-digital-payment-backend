@@ -1,10 +1,10 @@
 const db = require('../config/db')
 
 module.exports = {
-	// Get Deal
-	get: user_id => {
+	// Get Balance
+	get: userId => {
 		return new Promise((resolve, reject) => {
-			const sql = `SELECT * FROM balances where userid_='${user_id}'`
+			const sql = `SELECT * FROM balance where user_id='${userId}'`
 
 			db.query(sql, (error, result) => {
 				if (!error) {
@@ -16,10 +16,10 @@ module.exports = {
 		})
 	},
 
-	// Create Deal
+	// Create Balance
 	create: data => {
 		return new Promise((resolve, reject) => {
-			const sql = 'INSERT INTO balances SET ?'
+			const sql = 'INSERT INTO balance SET ?'
 
 			db.query(sql, data, (error, result) => {
 				if (!error) {
@@ -31,12 +31,12 @@ module.exports = {
 		})
 	},
 
-	// Update Deal
+	// Update Balance
 	update: (user_id, data) => {
 		return new Promise((resolve, reject) => {
-			const sql = `UPDATE balances SET ? WHERE user_id='${user_id}'`
+			const sql = 'UPDATE deals SET ? WHERE user_id = ?'
 
-			db.query(sql, data, (error, result) => {
+			db.query(sql, [data, user_id], (error, result) => {
 				if (!error) {
 					resolve(result)
 				} else {
