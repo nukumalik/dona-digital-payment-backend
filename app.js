@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const logger = require('morgan')
 const path = require('path')
+const passport = require('passport')
 
 // Main App
 const app = express()
@@ -19,6 +20,10 @@ app.use('/public', express.static(path.join(__dirname, 'public')))
 
 // CORS
 app.use(cors())
+
+//Passport
+app.use(passport.initialize())
+require('./src/helpers/passport')(passport)
 
 // Routes
 app.use('/api/v1', require('./src/config/routes'))
