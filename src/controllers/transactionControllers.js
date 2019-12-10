@@ -10,65 +10,31 @@ module.exports = {
 	// All Transaction
 	allTransaction: (req, res) => {
 		// User ID
-		const { user_id } = req.prams
+		const { user_id } = req.params
 
 		Transaction.all(user_id)
-			.then(result => {
-				// Type Transfer
-				if (result.type === 'transfer') {
-					for (let i = 0; i <= result.length; i++) {
-						Transfer.get(result.id[i]).then(data => {
-							res.status(200).json({
-								status: 200,
-								error: false,
-								message: 'Success to get all transaction with transfer type',
-								data,
-							})
+			.then(async result => {
+				let dataResult = []
+				for (let i = 0; i < result.length; i++) {
+					if (result[i].type === 'topup') {
+						await Topup.get(result[i].id).then(data => {
+							dataResult.push({ ...data[0], transaction_type: 'topup' })
+						})
+					}
+
+					if (result[i].type === 'ppob') {
+						await PPOB.get(result[i].id).then(data => {
+							dataResult.push({ ...data[0], transaction_type: 'ppob' })
 						})
 					}
 				}
 
-				// Type Payment
-				if (result.type === 'payment') {
-					for (let i = 0; i <= result.length; i++) {
-						Payment.get(result.id[i]).then(data => {
-							res.status(200).json({
-								status: 200,
-								error: false,
-								message: 'Success to get all transaction with payment type',
-								data,
-							})
-						})
-					}
-				}
-
-				// Type PPOB
-				if (result.type === 'ppob') {
-					for (let i = 0; i <= result.length; i++) {
-						PPOB.get(result.id[i]).then(data => {
-							res.status(200).json({
-								status: 200,
-								error: false,
-								message: 'Success to get all transaction with PPOB type',
-								data,
-							})
-						})
-					}
-				}
-
-				// Type Topup
-				if (result.type === 'topup') {
-					for (let i = 0; i <= result.length; i++) {
-						Topup.get(result.id[i]).then(data => {
-							res.status(200).json({
-								status: 200,
-								error: false,
-								message: 'Success to get all transaction with topup type',
-								data,
-							})
-						})
-					}
-				}
+				res.json({
+					status: 200,
+					error: false,
+					message: 'Success get all transactions',
+					data: dataResult,
+				})
 			})
 			.catch(error => {
 				res.status(500).json({
@@ -98,7 +64,7 @@ module.exports = {
 		const data = { id, user_id, type }
 
 		Transaction.create(data)
-			.then(() => {
+			.then(async () => {
 				if (type === 'payment') {
 					const transaction_id = id
 					const { merchant_id, amount, description } = req.body
@@ -138,12 +104,17 @@ module.exports = {
 
 				if (type === 'ppob') {
 					const transaction_id = id
-					const { merchant_id, phone, type, nominal, amount, method } = req.body
+					const { merchant_id, phone, nominal, amount, type_ppob } = req.body
 					const order_at = new Date()
 					const status = 'pending'
-					const ppobData = { transaction_id, merchant_id, phone, type, nominal, amount, status, method, order_at }
+					const ppobData = { transaction_id, merchant_id, phone, type: type_ppob, nominal, amount, status, order_at }
 					PPOB.create(ppobData)
-						.then(data => {
+						.then(async data => {
+							const userBalance = await Balance.get(user_id)
+							Balance.update(user_id, { amount: parseInt(userBalance[0].amount) - parseInt(amount) })
+								.then(() => {})
+								.catch(err => console.log(err))
+
 							res.status(200).json({
 								status: 200,
 								error: false,
@@ -162,17 +133,18 @@ module.exports = {
 				}
 
 				if (type === 'topup') {
+					console.log('asdf')
 					const transaction_id = id
 					const { merchant_id, amount, method } = req.body
 					const topupData = { transaction_id, merchant_id, amount, method }
 
-					// Update user balance
-					const userBalance = Balance.get(user_id).data[0].amount
-					Balance.update(user_id, { amount: userBalance + amount })
+					const userBalance = await Balance.get(user_id)
+					Balance.update(user_id, { amount: parseInt(userBalance[0].amount) + parseInt(amount) })
+						.then(() => {})
+						.catch(err => console.log(err))
 
 					Topup.create(topupData)
 						.then(data => {
-							Balance.updateAdd(user_id, amount)
 							res.status(200).json({
 								status: 200,
 								error: false,
@@ -181,6 +153,7 @@ module.exports = {
 							})
 						})
 						.catch(error => {
+							console.log(error)
 							res.status(400).json({
 								status: 400,
 								error: true,

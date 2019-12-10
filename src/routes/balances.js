@@ -12,7 +12,7 @@ router
 	// .get('/:id', isAuthenticated, balanceControllers.getBalance)
 	// .post('/', isAuthenticated, balanceControllers.addBalance)
 	// .patch('/:id', isAuthenticated, balanceControllers.updateBalance)
-	.get('/:id', balanceControllers.getBalance)
+	.get('/:user_id', balanceControllers.getBalance)
 	.post('/', balanceControllers.addBalance)
 	.patch('/:id', balanceControllers.updateBalance)
 

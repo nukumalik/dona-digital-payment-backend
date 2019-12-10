@@ -4,7 +4,7 @@ module.exports = {
 	// All Transaction
 	all: user_id => {
 		return new Promise((resolve, reject) => {
-			const sql = `SELECT * FROM transaction WHERE user_id='${user_id}'`
+			const sql = `SELECT * FROM transactions WHERE user_id='${user_id}'`
 
 			db.query(sql, (error, result) => {
 				if (!error) {
@@ -19,7 +19,7 @@ module.exports = {
 	// Get Transaction
 	get: id => {
 		return new Promise((resolve, reject) => {
-			const sql = `SELECT * FROM transaction where id='${id}'`
+			const sql = `SELECT * FROM transactions where id='${id}'`
 
 			db.query(sql, (error, result) => {
 				if (!error) {
@@ -34,7 +34,7 @@ module.exports = {
 	// Create Transaction
 	create: data => {
 		return new Promise((resolve, reject) => {
-			const sql = 'INSERT INTO transaction SET ?'
+			const sql = 'INSERT INTO transactions SET ?'
 
 			db.query(sql, data, (error, result) => {
 				if (!error) {
@@ -49,7 +49,7 @@ module.exports = {
 	// Update Transaction
 	update: (id, data) => {
 		return new Promise((resolve, reject) => {
-			const sql = `UPDATE transaction SET ? WHERE id='${id}'`
+			const sql = `UPDATE transactions SET ? WHERE id='${id}'`
 
 			db.query(sql, data, (error, result) => {
 				if (!error) {

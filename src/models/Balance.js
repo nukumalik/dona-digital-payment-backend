@@ -34,7 +34,7 @@ module.exports = {
 	// Update Balance
 	update: (user_id, data) => {
 		return new Promise((resolve, reject) => {
-			const sql = 'UPDATE deals SET ? WHERE user_id = ?'
+			const sql = 'UPDATE balance SET ? WHERE user_id = ?'
 
 			db.query(sql, [data, user_id], (error, result) => {
 				if (!error) {

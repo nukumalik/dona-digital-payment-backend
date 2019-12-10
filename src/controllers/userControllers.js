@@ -1,5 +1,6 @@
 // Model
 const User = require('../models/User')
+const Balance = require('../models/Balance')
 const uuid4 = require('uuid/v4')
 const bcryptHelper = require('../helpers/bcrypt')
 const bcrypt = require('bcryptjs')
@@ -40,6 +41,12 @@ module.exports = {
 		// Saving to database
 		User.signup(data)
 			.then(() => {
+				let balanceData = {
+					id: uuid4(),
+					user_id: data.id,
+					amount: 0,
+				}
+				Balance.create(balanceData)
 				res.json({
 					status: 200,
 					error: false,
@@ -109,7 +116,7 @@ module.exports = {
 						.then(compareResult => {
 							// console.log(result[0])
 							let userData = {
-								id: result[0].login,
+								id: result[0].id,
 								name: result[0].name,
 								email: result[0].email,
 								phone: result[0].phone,
@@ -214,8 +221,9 @@ module.exports = {
 							res.json({
 								status: 200,
 								error: false,
-								message: 'otp is verified, user can now change the pin',
-								data: { ...data, phone },
+								verified: true,
+								message: 'otp is verified',
+								phone,
 							})
 						})
 						.catch(err => {

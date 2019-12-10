@@ -11,6 +11,7 @@ router
 	// .use('/payments', require('../routes/payments'))
 	// .use('/ppobs', require('../routes/ppobs'))
 	.use('/transactions', require('../routes/transactions'))
-// .use('/transfers', require('../routes/transfers'))
+	// .use('/transfers', require('../routes/transfers'))
+	.use('/balances', require('../routes/balances'))
 
 module.exports = router
